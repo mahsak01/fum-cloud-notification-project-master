@@ -1,0 +1,6 @@
+docker run -d --name postgres -e POSTGRES_PASSWORD=postgres -e POSTGRES_USERNAME=postgres -p 5432:5432 -v /path/to/local/directory:/var/lib/postgresql/data postgres
+docker exec -it postgres psql -U postgres
+CREATE DATABASE core;
+CREATE USER postgres WITH ENCRYPTED PASSWORD 'postgres';
+GRANT ALL PRIVILEGES ON DATABASE core TO postgres ;
+docker run -d --name activemq -p 61616:61616 -p 8161:8161 -e ACTIVEMQ_ADMIN_LOGIN=activemq -e ACTIVEMQ_ADMIN_PASSWORD=activemq webcenter/activemq

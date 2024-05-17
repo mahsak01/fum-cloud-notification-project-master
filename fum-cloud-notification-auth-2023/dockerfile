@@ -1,0 +1,16 @@
+FROM golang:latest AS build
+
+WORKDIR /app
+
+COPY . .
+
+RUN go get gorm.io/driver/mysql
+
+RUN go mod download
+
+RUN go build -o main ./cmd/main.go
+
+EXPOSE 8082
+
+cmd ["/app/main"]
+
