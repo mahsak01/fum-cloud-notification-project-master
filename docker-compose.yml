@@ -11,8 +11,8 @@ services:
       - MYSQL_ROOT_PASSWORD=root
       - MYSQL_PASSWORD=root
       - MYSQL_DATABASE=auth
-    # volumes:
-    #   - db-data:/var/lib/mysql
+#    volumes:
+#       - db-data:/var/lib/mysql
     networks:
       - my_network
 
@@ -33,7 +33,10 @@ services:
     image: postgres
     ports:
       - "5432:5432"
+    expose:
+      - 5432
     environment:
+      - POSTGRES_DB = core
       - POSTGRES_USERNAME=postgres
       - POSTGRES_PASSWORD=postgres
     volumes:
@@ -43,6 +46,8 @@ services:
 
   activemq:
     image: webcenter/activemq
+    expose:
+      - 61616
     ports:
       - "8161:8161"
       - "61616:61616"
@@ -51,6 +56,21 @@ services:
       - ACTIVEMQ_PASSWORD=activemq
     networks:
       - my_network
+
+
+  core:
+    image: core
+    ports:
+       - "8080:8080"
+    expose:
+      - 8080
+    environment:
+       - ACTIVEMQ_URL=tcp://activemq:61616
+    networks:
+       - my_network
+    depends_on:
+       - postgres
+       - activemq
 
 networks:
   my_network:
